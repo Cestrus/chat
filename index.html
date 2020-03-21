@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Title</title>
+	<style>
+		.messages { list-style-type: none; margin: 0; padding: 0; }
+		.messages li { padding: 5px 10px; }
+		.messages li:nth-child(odd) { background: #eee; }
+		body{margin: 0; padding: 0;	background-color: azure;font: 13px Verdana, Arial;}
+		.container{	width: 80vw; height: 80vh;	border: 1px solid gray;	border-radius: 10px; box-shadow: 0 0 5px 2px
+		black;	margin: 10px auto; background-color: aliceblue;	}
+		.form{	width: 80vw; margin: 10px auto;	}
+		.input{	width: calc(80vw - 60px);}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<ul class="messages"></ul>
+	</div>
+	<form action="" class="form">
+		<input class="input" autocomplete="off" />
+		<button class="btn">Send</button>
+	</form>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		let socket = io();
+		let input = document.querySelector('.input');
+		let messages = document.querySelector('.messages');
+ 		document.querySelector('.form').addEventListener('submit', (ev => {
+			ev.preventDefault();
+			socket.emit('chat message', input.value);
+			input.value = '';
+			return false;
+		}));
+		socket.on('chat message', (msg)=>{
+			let li = document.createElement('li');
+			li.innerText = msg;
+			messages.append(li);
+		})
+	</script>
+</body>
+</html>
